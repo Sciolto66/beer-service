@@ -1,2 +1,3 @@
-# beer-service
-Beer Service
+# Beer Service
+
+Spring Boot Microservice example
