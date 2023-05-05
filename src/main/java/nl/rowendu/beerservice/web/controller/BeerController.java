@@ -1,16 +1,14 @@
 package nl.rowendu.beerservice.web.controller;
 
+import java.io.Serializable;
+import java.util.UUID;
 import nl.rowendu.beerservice.web.model.BeerDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 /** Created by ronlangeveld on 04/05/2023 */
-@RequestMapping("/api/v1/beer")
+@RequestMapping("/api/v1/beer/")
 @RestController
 public class BeerController {
   @GetMapping("{beerId}")
@@ -21,7 +19,7 @@ public class BeerController {
   }
 
   @PostMapping
-  public ResponseEntity<Serializable> savedNewBeer(@RequestBody BeerDto beerDto) {
+  public ResponseEntity<Serializable> saveNewBeer(@RequestBody BeerDto beerDto) {
 
     // todo impl
     return new ResponseEntity<>(HttpStatus.CREATED);
