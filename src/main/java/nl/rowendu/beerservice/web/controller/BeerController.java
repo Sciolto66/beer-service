@@ -5,6 +5,7 @@ import java.util.UUID;
 import nl.rowendu.beerservice.web.model.BeerDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /** Created by ronlangeveld on 04/05/2023 */
@@ -19,7 +20,7 @@ public class BeerController {
   }
 
   @PostMapping
-  public ResponseEntity<Serializable> saveNewBeer(@RequestBody BeerDto beerDto) {
+  public ResponseEntity<Serializable> saveNewBeer(@Validated @RequestBody BeerDto beerDto) {
 
     // todo impl
     return new ResponseEntity<>(HttpStatus.CREATED);
@@ -27,7 +28,7 @@ public class BeerController {
 
   @PutMapping("/{beerId}")
   public ResponseEntity<Serializable> updateBeerByid(
-      @PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
+      @PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDto beerDto) {
 
     // todo impl
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
