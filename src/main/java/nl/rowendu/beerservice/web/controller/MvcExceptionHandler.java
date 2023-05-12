@@ -33,4 +33,10 @@ public class MvcExceptionHandler {
     public ResponseEntity<List<ObjectError>> handleBindException(BindException e) {
         return new ResponseEntity<>(e.getAllErrors(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(BeerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBeerNotFoundException(BeerNotFoundException e) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }
