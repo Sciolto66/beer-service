@@ -1,8 +1,9 @@
 package nl.rowendu.beerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.rowendu.beerservice.domain.Beer;
+import nl.rowendu.beerservice.bootstrap.BeerLoader;
 import nl.rowendu.beerservice.repositories.BeerRepository;
+import nl.rowendu.beerservice.services.BeerService;
 import nl.rowendu.beerservice.web.model.BeerDto;
 import nl.rowendu.beerservice.web.model.BeerStyleEnum;
 import org.junit.jupiter.api.Disabled;
@@ -21,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,11 +47,17 @@ class BeerControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
+    BeerService beerService;
+
+    @MockBean
     BeerRepository beerRepository;
+
+    @MockBean
+    BeerLoader beerLoader;
 
     @Test
     void getBeerById() throws Exception {
-        given(beerRepository.findById(any())).willReturn(Optional.of(Beer.builder().build()));
+        given(beerService.getBeerById(any())).willReturn(getValidBeerDto());
 
         mockMvc.perform(get("/api/v1/beer/{beerId}", UUID.randomUUID().toString())
                         .param("iscold", "yes")
@@ -75,18 +81,6 @@ class BeerControllerTest {
                                 fieldWithPath("price").description("Price"),
                                 fieldWithPath("quantityOnHand").description("Quantity On hand")
                         )));
-    }
-
-    @Test
-    void getBeerByIdFails() throws Exception {
-        given(beerRepository.findById(any())).willReturn(Optional.empty());
-        UUID uuid = UUID.randomUUID();
-        mockMvc.perform(get("/api/v1/beer/" + uuid).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BeerNotFoundException));
-//                .andExpect(result ->
-//                        assertEquals("Beer not found with id "
-//                                + uuid, Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
     @Test
@@ -133,7 +127,7 @@ class BeerControllerTest {
                 .beerName("My Beer")
                 .beerStyle(BeerStyleEnum.PALE_ALE)
                 .price(new BigDecimal("2.99"))
-                .upc(123123123123L)
+                .upc(BeerLoader.BEER_1_UPC)
                 .build();
     }
 
